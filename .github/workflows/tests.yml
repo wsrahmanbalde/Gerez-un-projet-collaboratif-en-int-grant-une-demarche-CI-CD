@@ -1,0 +1,45 @@
+name: Tests - Backend et Frontend
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test-backend:
+    name: 🔍 Tests Java + JaCoCo
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: back
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 11
+      - run: mvn clean verify
+      - run: mvn jacoco:report
+      - uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-report
+          path: back/target/site/jacoco
+
+  test-frontend:
+    name: 🧪 Tests Angular
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: front
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+      - run: npm install
+      - run: npm run test -- --watch=false --browsers=ChromeHeadless --code-coverage
+      - uses: actions/upload-artifact@v4
+        with:
+          name: angular-coverage-report
+          path: front/coverage
