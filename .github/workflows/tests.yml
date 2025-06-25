@@ -8,7 +8,7 @@ on:
 
 jobs:
   test-backend:
-    name: Tests Java + JaCoCo
+    name: Tests Java + JaCoCo 
     runs-on: ubuntu-latest
     defaults:
       run:
