@@ -37,3 +37,26 @@ jobs:
 
       - name: 📊 Générer le rapport de couverture JaCoCo
         run: mvn jacoco:report
+
+  test-frontend:
+    name: 🧪 Tests Angular + Coverage
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: front
+
+    steps:
+      - name: 📥 Checkout du code
+        uses: actions/checkout@v3
+
+      - name: ⚙️ Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: 📦 Install dependencies
+        run: npm install
+
+      - name: 🚀 Run Angular tests with coverage
+        run: npm run test -- --watch=false --browsers=ChromeHeadless --code-coverage
