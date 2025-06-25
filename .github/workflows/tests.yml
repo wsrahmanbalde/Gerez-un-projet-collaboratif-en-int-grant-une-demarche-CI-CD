@@ -8,7 +8,7 @@ on:
 
 jobs:
   test-backend:
-    name: 🔍 Tests Java + JaCoCo
+    name: Tests Java + JaCoCo
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -27,7 +27,7 @@ jobs:
           path: back/target/site/jacoco
 
   test-frontend:
-    name: 🧪 Tests Angular
+    name: Tests Angular
     runs-on: ubuntu-latest
     defaults:
       run:
