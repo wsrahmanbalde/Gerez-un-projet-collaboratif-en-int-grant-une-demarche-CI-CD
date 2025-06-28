@@ -1,57 +1,72 @@
-# BobApp
+# 🤖 BobApp – CI/CD Automatisée pour l'application de blagues
 
-Clone project:
+Bienvenue sur le projet **BobApp** !  
+Cette application propose une blague par jour, mais avait besoin d’un bon coup de boost côté qualité et déploiement.  
+Ce repo met en place une **pipeline CI/CD complète** pour automatiser les tests, la qualité et le déploiement.
 
-> git clone XXXXX
+---
 
-## Front-end 
+## 🚀 Fonctionnalités du projet
 
-Go inside folder the front folder:
+- Front-end : Angular (v14+) 🎨
+- Back-end : Spring Boot + Java 11 🔧
+- Tests unitaires & couverture (JaCoCo, Angular Coverage) ✅
+- Analyse de qualité automatisée via SonarCloud 🧠
+- Déploiement Docker (backend + frontend) 🐳
 
-> cd front
+---
 
-Install dependencies:
+## 🧪 Lancer le projet en local
 
-> npm install
+### Backend
+```bash
+cd back
+mvn clean install
+mvn spring-boot:run
 
-Launch Front-end:
+Frontend
+cd front
+npm install
+npm run start
 
-> npm run start;
+Utilisation avec Docker
+Build:
+docker build -t bobapp-back ./back
+docker build -t bobapp-front ./front
 
-### Docker
+Lancer les conteneurs:
+docker run -p 8080:8080 bobapp-back
+docker run -p 4200:4200 bobapp-front
 
-Build the container:
+Pipeline CI/CD (GitHub Actions):
 
-> docker build -t bobapp-front .  
+Étape                                      Description
+tests-backend                          Tests Java + JaCoCo                         
+tests-frontend                         Tests Angular + couverture
+quality                                Analyse SonarCloud (qualité + dette technique)
+deploy                                 Build + push sur Docker Hub
 
-Start the container:
 
-> docker run -p 8080:8080 --name bobapp-front -d bobapp-front
+## Tous les détails dans le fichier docs/workflow-explained.md
 
-## Back-end
+Liens utiles:
+   SonarCloud :  https://sonarcloud.io/project/overview?id=wsrahmanbalde_Gerez-un-projet-collaboratif-en-int-grant-une-demarche-CI-CD
+   Rapport de couverture JaCoCo : back/target/site/jacoco/index.html
+   Rapport coverage Angular : front/coverage/index.html
 
-Go inside folder the back folder:
+Docker Hub :
+   bobapp-front: lien
+   bobapp-back: lien
 
-> cd back
+    •   Couverture de test : ≥ 80 %
+	•	New Blocker Issues : 0
+	•	Réduction de la dette technique
+	•	Déploiement uniquement si tous les tests et analyses sont OK
 
-Install dependencies:
+Contribution:
+    Les contributions sont les bienvenues !
+    Merci de créer une issue ou une pull request avec des tests si possible.
 
-> mvn clean install
-
-Launch Back-end:
-
->  mvn spring-boot:run
-
-Launch the tests:
-
-> mvn clean install
-
-### Docker
-
-Build the container:
-
-> docker build -t bobapp-back .  
-
-Start the container:
-
-> docker run -p 8080:8080 --name bobapp-back -d bobapp-back 
+Contact:
+    Projet maintenu dans le cadre d’une mission pour OpenClassrooms.
+    Développé par : BALDE Abdourahamane
