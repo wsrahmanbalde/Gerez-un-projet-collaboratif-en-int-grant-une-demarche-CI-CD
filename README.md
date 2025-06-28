@@ -1,78 +1,112 @@
-# 🤖 BobApp – CI/CD Automatisée pour l'application de blagues
+# BobApp – Pipeline CI/CD complète pour une app de blagues
 
-Bienvenue sur le projet **BobApp** !  
-Cette application propose une blague par jour, mais avait besoin d’un bon coup de boost côté qualité et déploiement.  
-Ce repo met en place une **pipeline CI/CD complète** pour automatiser les tests, la qualité et le déploiement.
-
----
-
-## 🚀 Fonctionnalités du projet
-
-- Front-end : Angular (v14+) 🎨
-- Back-end : Spring Boot + Java 11 🔧
-- Tests unitaires & couverture (JaCoCo, Angular Coverage) ✅
-- Analyse de qualité automatisée via SonarCloud 🧠
-- Déploiement Docker (backend + frontend) 🐳
+Bienvenue sur **BobApp** !  
+Cette application propose une blague du jour, mais avait besoin d'une **industrialisation** moderne pour assurer sa qualité, sa fiabilité et son déploiement automatisé.  
+Ce repository met en place une **CI/CD professionnelle** avec GitHub Actions, Docker, SonarCloud et des tests complets.
 
 ---
 
-## 🧪 Lancer le projet en local
+## Technologies utilisées
 
-### Backend
-```bash
+| Côté              | Techno                             |
+|-------------------|-------------------------------------|
+| Front-end         | Angular (v14+)                      |
+| Back-end          | Spring Boot + Java 11              |
+| Qualité code      | SonarCloud                         |
+| Tests back        | JUnit + JaCoCo                     |
+| Tests front       | Angular CLI + Coverage             |
+| Conteneurisation  | Docker (backend & frontend)        |
+| CI/CD             | GitHub Actions                     |
+
+---
+
+## Lancement du projet en local
+
+### ▶Backend
+
+\`\`\`bash
 cd back
 mvn clean install
-mvn spring-boot:run 
-```
+mvn spring-boot:run
+\`\`\`
 
-### Frontend
-```cd front
+### ▶Frontend
+
+\`\`\`bash
+cd front
 npm install
 npm run start
-```
+\`\`\`
 
-### Utilisation avec Docker
-``` Build:
-docker build -t bobapp-back ./back   
+---
+
+## Utilisation avec Docker
+
+### Build des conteneurs
+
+\`\`\`bash
+docker build -t bobapp-back ./back
 docker build -t bobapp-front ./front
-```
+\`\`\`
 
-### Lancer les conteneurs:
-```
-docker run -p 8080:8080 bobapp-back
-docker run -p 4200:4200 bobapp-front
-```
+### ▶Exécution des conteneurs
 
-### Pipeline CI/CD (GitHub Actions):
+\`\`\`bash
+docker run -p 8080:8080 --name bobapp-back -d bobapp-back
+docker run -p 4200:4200 --name bobapp-front -d bobapp-front
+\`\`\`
 
-### Étape                                      Description
-```
-tests-backend                          Tests Java + JaCoCo                         
-tests-frontend                         Tests Angular + couverture
-quality                                Analyse SonarCloud (qualité + dette technique)
-deploy                                 Build + push sur Docker Hub
-```
+---
 
-## Tous les détails dans le fichier docs/workflow-explained.md
+## Workflows GitHub Actions (CI/CD)
 
-### Liens utiles:
-   SonarCloud :  https://sonarcloud.io/project/overview?id=wsrahmanbalde_Gerez-un-projet-collaboratif-en-int-grant-une-demarche-CI-CD
-   Rapport de couverture JaCoCo : back/target/site/jacoco/index.html
-   Rapport coverage Angular : front/coverage/index.html
+Chaque étape est automatisée et s’exécute sur les branches `main` :
 
-### Docker Hub :
-   bobapp-front: lien
-   bobapp-back: lien
+| Étape         | Description                                               |
+|---------------|-----------------------------------------------------------|
+| `tests.yml`   | Exécution des tests unitaires backend & frontend          |
+| `quality.yml` | Analyse de la qualité de code via **SonarCloud**          |
+| `docker.yml` | Build & push des images Docker vers **Docker Hub**        |
+| `ci.yml`    | Pipeline de base – validation de déclenchement CI/CD      |
 
-    •   Couverture de test : ≥ 80 %
-	•	New Blocker Issues : 0
-	•	Réduction de la dette technique
-	•	Déploiement uniquement si tous les tests et analyses sont OK
+**Le déploiement sur Docker Hub ne s’exécute que si tous les tests et la qualité passent.**
 
-### Contribution:
-    Les contributions sont les bienvenues !
-    Merci de créer une issue ou une pull request avec des tests si possible.
+---
 
-### Contact:
-    Projet maintenu dans le cadre d’une mission pour OpenClassrooms.
-    Développé par : BALDE Abdourahamane
+## Indicateurs clés (KPI)
+
+- **Couverture de tests minimum** : `80 %`
+- **Nouveaux bugs bloquants (New Blocker Issues)** : `0`
+- **Dette technique maîtrisée**
+- **Déploiement uniquement si tout est vert**
+
+---
+
+## Liens utiles
+
+- **SonarCloud** :  
+  [Lien vers le projet](https://sonarcloud.io/project/overview?id=wsrahmanbalde_Gerez-un-projet-collaboratif-en-int-grant-une-demarche-CI-CD)
+
+- **Rapports de couverture** :
+   - Back-end (JaCoCo) : `back/target/site/jacoco/index.html`
+   - Front-end (Angular Coverage) : `front/coverage/index.html`
+
+- **Images Docker** :
+   - `bobapp-front` : [Lien Docker Hub – à compléter]
+   - `bobapp-back` : [Lien Docker Hub – à compléter]
+
+---
+
+## Contribution
+
+Les contributions sont les bienvenues !  
+Merci de :
+- Créer une *issue* pour décrire un problème ou une idée,
+- Proposer une *pull request* incluant des tests si possible.
+
+---
+
+## Auteur
+
+Développé par **BALDE Abdourahamane**  
+Dans le cadre du projet OpenClassrooms – _Gérez un projet collaboratif en intégrant une démarche CI/CD_.
