@@ -63,4 +63,4 @@ jobs:
             -Dsonar.login=${{ secrets.SONAR_TOKEN }}
 
 # Ce fichier est déclenché après les tests et analyse la qualité du code (via SonarCloud).
-# Il n’est exécuté que si les tests sont passés avec succès.
+# Il n’est exécuté que si les tests sont passés avec succès
