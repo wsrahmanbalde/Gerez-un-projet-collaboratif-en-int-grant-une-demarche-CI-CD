@@ -48,4 +48,4 @@ jobs:
           name: angular-coverage-report
           path: front/coverage/bobapp/*
 
-# On y teste le backend (Maven + JaCoCo) et le frontend (Angular + couverture)
+# On y teste le backend (Maven + JaCoCo) et le frontend (Angular + couverture).
