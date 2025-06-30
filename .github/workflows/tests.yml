@@ -47,5 +47,5 @@ jobs:
         with:
           name: angular-coverage-report
           path: front/coverage
-# Ce fichier ne s'exécute que si CI - Pipeline général a réussi
+
 # On y teste le backend (Maven + JaCoCo) et le frontend (Angular + couverture)
