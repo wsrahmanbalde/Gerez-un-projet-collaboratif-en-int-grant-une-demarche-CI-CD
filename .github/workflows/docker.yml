@@ -1,14 +1,16 @@
 name: Déploiement - Docker Hub
 
 on:
-  push:
-    branches:
-      - main
+  workflow_run:
+    workflows: ["Qualité - SonarCloud"]
+    types:
+      - completed
 
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
     name: Docker Build & Push
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -30,3 +32,11 @@ jobs:
           cd front
           docker build -t ${{ secrets.DOCKER_USERNAME }}/bobapp-front .
           docker push ${{ secrets.DOCKER_USERNAME }}/bobapp-front
+
+      - name: Clean up local Docker images
+        run: |
+          docker rmi ${{ secrets.DOCKER_USERNAME }}/bobapp-back || true
+          docker rmi ${{ secrets.DOCKER_USERNAME }}/bobapp-front || true
+
+# Ce workflow est exécuté UNIQUEMENT après l’analyse SonarCloud si tout est OK.
+# Il build et publie les images Docker du frontend et du backend sur Docker Hub.
