@@ -21,7 +21,10 @@ jobs:
           java-version: 17
       - run: mvn clean verify
       - run: mvn jacoco:report
-      - run: ls -l target/
+      - name: Vérifier jacoco.exec
+        run: |
+          ls -lh target/
+          test -f target/jacoco.exec && echo "jacoco.exec trouvé !" || (echo "jacoco.exec manquant !" && exit 1)
       - uses: actions/upload-artifact@v4
         with:
           name: jacoco-exec
@@ -40,8 +43,10 @@ jobs:
           node-version: 18
       - run: npm ci
       - run: npm run test -- --watch=false --browsers=ChromeHeadless --code-coverage
-      - run: find coverage -name lcov.info
-      - run: ls -l coverage/
+      - name: Vérifier lcov.info
+        run: |
+          find coverage -name lcov.info
+          test -f coverage/bobapp/lcov.info && echo "lcov.info trouvé !" || (echo "lcov.info manquant !" && exit 1)
       - uses: actions/upload-artifact@v4
         with:
           name: lcov-frontend
@@ -72,6 +77,11 @@ jobs:
         with:
           name: lcov-frontend
           path: front/coverage/bobapp
+
+      - name: Vérifier les artifacts téléchargés
+        run: |
+          ls -lh back/target/
+          ls -lh front/coverage/bobapp/
 
       - name: Installer SonarCloud Scanner
         run: npm install -g sonar-scanner
