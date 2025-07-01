@@ -20,13 +20,13 @@ jobs:
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 11
+          java-version: 17
       - run: mvn clean verify
       - run: mvn jacoco:report
       - uses: actions/upload-artifact@v4
         with:
-          name: jacoco-report
-          path: back/target/site/jacoco
+          name: jacoco-exec
+          path: back/target/jacoco.exec
 
   test-frontend:
     name: Tests Angular
@@ -45,7 +45,5 @@ jobs:
       - run: npm run test -- --watch=false --browsers=ChromeHeadless --code-coverage
       - uses: actions/upload-artifact@v4
         with:
-          name: angular-coverage-report
-          path: front/coverage/bobapp/*
-
-# On y teste le backend (Maven + JaCoCo) et le frontend (Angular + couverture).
+          name: lcov-frontend
+          path: front/coverage/lcov.info
