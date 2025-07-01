@@ -52,21 +52,6 @@ jobs:
           name: lcov-frontend
           path: front/coverage/bobapp/lcov.info
 
-      # 👉 AJOUTE CETTE ÉTAPE ICI
-      - name: Recompiler le backend (sans tests) pour SonarCloud
-        run: mvn clean compile -DskipTests
-        working-directory: back
-
-      - name: Vérifier les fichiers téléchargés
-        run: |
-          ls -lh back/target/
-          ls -lh back/target/classes/
-          ls -lh front/coverage/bobapp/
-
-      - name: Installer SonarCloud Scanner
-        run: npm install -g sonar-scanner
-
-
   analyse-sonarcloud:
     name: Analyse complète SonarCloud (Back + Front)
     runs-on: ubuntu-latest
@@ -93,9 +78,16 @@ jobs:
           name: lcov-frontend
           path: front/coverage/bobapp
 
+      # ➡️ ÉTAPE AJOUTÉE : Recompiler le backend pour générer back/target/classes
+      # Cette étape est indispensable pour que SonarCloud trouve les classes Java à analyser.
+      - name: Recompiler le backend (sans tests) pour SonarCloud
+        run: mvn clean compile -DskipTests
+        working-directory: back
+
       - name: Vérifier les artifacts téléchargés
         run: |
           ls -lh back/target/
+          ls -lh back/target/classes/
           ls -lh front/coverage/bobapp/
 
       - name: Installer SonarCloud Scanner
