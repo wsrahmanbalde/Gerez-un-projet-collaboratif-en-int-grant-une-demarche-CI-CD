@@ -85,10 +85,10 @@ jobs:
 
       - name: Vérifier les artifacts téléchargés
         run: |
-          ls -lh target/
-          ls -lh target/classes/
-          ls -lh target/site/jacoco/
-          ls -lh coverage/bobapp/
+          ls -lh back/target/
+          ls -lh back/target/classes/
+          ls -lh back/target/site/jacoco/
+          ls -lh front/coverage/bobapp/
 
       - name: Installer SonarCloud Scanner
         run: npm install -g sonar-scanner
