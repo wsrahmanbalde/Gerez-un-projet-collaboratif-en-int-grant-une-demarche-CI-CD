@@ -30,9 +30,10 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-maven
 
-      - name: Télécharger jacoco.exec depuis les artefacts
-        uses: actions/download-artifact@v4
+      - name: Télécharger jacoco.exec depuis le workflow précédent
+        uses: dawidd6/action-download-artifact@v2
         with:
+          workflow: Tests - Backend et Frontend
           name: jacoco-exec
           path: back/target
 
@@ -68,9 +69,10 @@ jobs:
       - name: Installer SonarCloud Scanner
         run: npm install -g sonar-scanner
 
-      - name: Télécharger lcov.info depuis les artefacts
-        uses: actions/download-artifact@v4
+      - name: Télécharger lcov.info depuis le workflow précédent
+        uses: dawidd6/action-download-artifact@v2
         with:
+          workflow: Tests - Backend et Frontend
           name: lcov-frontend
           path: coverage/bobapp
 
