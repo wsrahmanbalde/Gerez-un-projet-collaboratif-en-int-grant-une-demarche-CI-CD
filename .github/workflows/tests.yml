@@ -28,7 +28,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: jacoco-exec
-          path: target/jacoco.exec
+          path: back/target/jacoco.exec
 
   test-frontend:
     name: Tests Angular
@@ -50,7 +50,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: lcov-frontend
-          path: coverage/bobapp/lcov.info
+          path: front/coverage/bobapp/lcov.info
 
   analyse-sonarcloud:
     name: Analyse complète SonarCloud (Back + Front)
