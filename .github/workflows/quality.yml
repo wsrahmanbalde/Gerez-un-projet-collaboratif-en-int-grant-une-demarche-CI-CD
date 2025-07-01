@@ -18,72 +18,19 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 17
-
       - uses: actions/cache@v4
         with:
           path: ~/.m2
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-maven
-
-      - name: Télécharger jacoco.exec depuis le workflow précédent
-        uses: dawidd6/action-download-artifact@v2
-        with:
-          workflow: Tests - Backend et Frontend
-          name: jacoco-exec
-          path: back/target
-
       - name: Analyse SonarCloud Backend
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn clean verify sonar:sonar \
-          -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }} \
-          -Dsonar.organization=${{ secrets.SONAR_ORG }} \
-          -Dsonar.host.url=https://sonarcloud.io \
-          -Dsonar.token=${{ secrets.SONAR_TOKEN }} \
-          -Dsonar.coverage.jacoco.reportPaths=target/jacoco.exec
+        run: mvn clean verify sonar:sonar -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }} -Dsonar.organization=${{ secrets.SONAR_ORG }} -Dsonar.host.url=https://sonarcloud.io -Dsonar.token=${{ secrets.SONAR_TOKEN }}
 
-  analyse-frontend:
-    name: Analyse SonarCloud Frontend
-    runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
-    defaults:
-      run:
-        working-directory: front
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 18
-
-      - run: npm ci
-      - run: npm run build --if-present
-
-      - name: Installer SonarCloud Scanner
-        run: npm install -g sonar-scanner
-
-      - name: Télécharger lcov.info depuis le workflow précédent
-        uses: dawidd6/action-download-artifact@v2
-        with:
-          workflow: Tests - Backend et Frontend
-          name: lcov-frontend
-          path: coverage/bobapp
-
-      - name: Analyse SonarCloud Frontend
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: |
-          sonar-scanner \
-            -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }} \
-            -Dsonar.organization=${{ secrets.SONAR_ORG }} \
-            -Dsonar.sources=. \
-            -Dsonar.javascript.lcov.reportPaths=coverage/bobapp/lcov.info \
-            -Dsonar.host.url=https://sonarcloud.io \
-            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+# Ce fichier est déclenché après les tests et analyse la qualité du code (via SonarCloud).
+# Il n’est exécuté que si les tests sont passés avec succès

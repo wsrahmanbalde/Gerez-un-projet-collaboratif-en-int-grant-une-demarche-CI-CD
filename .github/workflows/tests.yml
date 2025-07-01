@@ -17,34 +17,16 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 11
-
-      - name: Lancer les tests et générer jacoco.exec
-        run: mvn clean verify
-
-      - name: Générer le rapport HTML JaCoCo
-        run: mvn jacoco:report
-
-      - name: Upload du rapport HTML JaCoCo
-        uses: actions/upload-artifact@v4
+      - run: mvn clean verify
+      - run: mvn jacoco:report
+      - uses: actions/upload-artifact@v4
         with:
           name: jacoco-report
           path: back/target/site/jacoco
-      - name: Vérifier que jacoco.exec existe
-        run: ls -lh back/target/jacoco.exec || echo "❌ jacoco.exec manquant"
-
-      - name: Vérifier que le dossier rapport HTML existe
-        run: ls -lh back/target/site/jacoco || echo "❌ Rapport HTML JaCoCo manquant"
-
-      - name: Upload du fichier jacoco.exec (pour SonarCloud)
-        uses: actions/upload-artifact@v4
-        with:
-          name: jacoco-exec
-          path: back/target/jacoco.exec
 
   test-frontend:
     name: Tests Angular
@@ -56,28 +38,14 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
       - uses: actions/setup-node@v4
         with:
           node-version: 18
-
-      - name: Installer les dépendances
-        run: npm ci
-
-      - name: Lancer les tests avec couverture
-        run: npm run test -- --watch=false --browsers=ChromeHeadless --code-coverage
-
-      - name: Upload du rapport HTML Angular
-        uses: actions/upload-artifact@v4
+      - run: npm ci
+      - run: npm run test -- --watch=false --browsers=ChromeHeadless --code-coverage
+      - uses: actions/upload-artifact@v4
         with:
           name: angular-coverage-report
-          path: front/coverage/bobapp
+          path: front/coverage/bobapp/*
 
-      - name: Vérifier que lcov.info existe
-        run: ls -lh front/coverage/bobapp/lcov.info || echo "❌ lcov.info manquant"
-
-      - name: Upload du fichier lcov.info (pour SonarCloud)
-        uses: actions/upload-artifact@v4
-        with:
-          name: lcov-frontend
-          path: front/coverage/bobapp/lcov.info
+# On y teste le backend (Maven + JaCoCo) et le frontend (Angular + couverture).
