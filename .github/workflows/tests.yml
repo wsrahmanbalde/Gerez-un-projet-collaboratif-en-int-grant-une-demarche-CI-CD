@@ -80,7 +80,7 @@ jobs:
 
       # ➡️ Recompiler le backend pour générer back/target/classes
       - name: Recompiler le backend (sans tests) pour SonarCloud
-        run: mvn clean compile -DskipTests
+        run: mvn compile -DskipTests
         working-directory: back
 
       - name: Vérifier les artifacts téléchargés
