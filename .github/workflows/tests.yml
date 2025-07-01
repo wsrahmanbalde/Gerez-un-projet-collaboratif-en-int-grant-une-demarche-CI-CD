@@ -71,7 +71,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: lcov-frontend
-          path: front/coverage
+          path: front/coverage/bobapp
 
       - name: Installer SonarCloud Scanner
         run: npm install -g sonar-scanner
@@ -86,6 +86,6 @@ jobs:
             -Dsonar.sources=back/src,front/src \
             -Dsonar.java.binaries=back/target/classes \
             -Dsonar.coverage.jacoco.reportPaths=back/target/jacoco.exec \
-            -Dsonar.javascript.lcov.reportPaths=front/coverage/lcov.info \
+            -Dsonar.javascript.lcov.reportPaths=front/coverage/bobapp/lcov.info \
             -Dsonar.host.url=https://sonarcloud.io \
             -Dsonar.login=${{ secrets.SONAR_TOKEN }}
