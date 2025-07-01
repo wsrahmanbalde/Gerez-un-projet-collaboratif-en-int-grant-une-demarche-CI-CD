@@ -21,14 +21,14 @@ jobs:
           java-version: 17
       - run: mvn clean verify
       - run: mvn jacoco:report
-      - name: Vérifier jacoco.exec
+      - name: Vérifier jacoco.xml
         run: |
-          ls -lh target/
-          test -f target/jacoco.exec && echo "jacoco.exec trouvé !" || (echo "jacoco.exec manquant !" && exit 1)
+          ls -lh target/site/jacoco/
+          test -f target/site/jacoco/jacoco.xml && echo "jacoco.xml trouvé !" || (echo "jacoco.xml manquant !" && exit 1)
       - uses: actions/upload-artifact@v4
         with:
-          name: jacoco-exec
-          path: back/target/jacoco.exec
+          name: jacoco-xml-report
+          path: back/target/site/jacoco/jacoco.xml
 
   test-frontend:
     name: Tests Angular
@@ -66,11 +66,11 @@ jobs:
           distribution: temurin
           java-version: 17
 
-      - name: Télécharger jacoco.exec
+      - name: Télécharger jacoco.xml
         uses: actions/download-artifact@v4
         with:
-          name: jacoco-exec
-          path: back/target/jacoco.exec
+          name: jacoco-xml-report
+          path: back/target/site/jacoco
 
       - name: Télécharger lcov.info
         uses: actions/download-artifact@v4
@@ -78,8 +78,7 @@ jobs:
           name: lcov-frontend
           path: front/coverage/bobapp
 
-      # ➡️ ÉTAPE AJOUTÉE : Recompiler le backend pour générer back/target/classes
-      # Cette étape est indispensable pour que SonarCloud trouve les classes Java à analyser.
+      # ➡️ Recompiler le backend pour générer back/target/classes
       - name: Recompiler le backend (sans tests) pour SonarCloud
         run: mvn clean compile -DskipTests
         working-directory: back
@@ -88,6 +87,7 @@ jobs:
         run: |
           ls -lh back/target/
           ls -lh back/target/classes/
+          ls -lh back/target/site/jacoco/
           ls -lh front/coverage/bobapp/
 
       - name: Installer SonarCloud Scanner
@@ -102,7 +102,7 @@ jobs:
             -Dsonar.organization=${{ secrets.SONAR_ORG }} \
             -Dsonar.sources=back/src,front/src \
             -Dsonar.java.binaries=back/target/classes \
-            -Dsonar.coverage.jacoco.reportPaths=back/target/jacoco.exec \
+            -Dsonar.coverage.jacoco.xmlReportPaths=back/target/site/jacoco/jacoco.xml \
             -Dsonar.javascript.lcov.reportPaths=front/coverage/bobapp/lcov.info \
             -Dsonar.host.url=https://sonarcloud.io \
-            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+            -Dsonar.token=${{ secrets.SONAR_TOKEN }}
