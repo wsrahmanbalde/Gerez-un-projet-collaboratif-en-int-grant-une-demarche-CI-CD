@@ -34,6 +34,11 @@ jobs:
         with:
           name: jacoco-report
           path: back/target/site/jacoco
+      - name: Vérifier que jacoco.exec existe
+        run: ls -lh back/target/jacoco.exec || echo "❌ jacoco.exec manquant"
+
+      - name: Vérifier que le dossier rapport HTML existe
+        run: ls -lh back/target/site/jacoco || echo "❌ Rapport HTML JaCoCo manquant"
 
       - name: Upload du fichier jacoco.exec (pour SonarCloud)
         uses: actions/upload-artifact@v4
@@ -67,6 +72,9 @@ jobs:
         with:
           name: angular-coverage-report
           path: front/coverage/bobapp
+
+      - name: Vérifier que lcov.info existe
+        run: ls -lh front/coverage/bobapp/lcov.info || echo "❌ lcov.info manquant"
 
       - name: Upload du fichier lcov.info (pour SonarCloud)
         uses: actions/upload-artifact@v4
