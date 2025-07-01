@@ -25,10 +25,17 @@ jobs:
         run: |
           ls -lh target/site/jacoco/
           test -f target/site/jacoco/jacoco.xml && echo "jacoco.xml trouvé !" || (echo "jacoco.xml manquant !" && exit 1)
+      # Télécharge les dépendances pour sonar.java.libraries
+      - name: Télécharger les dépendances Maven
+        run: mvn dependency:copy-dependencies
       - uses: actions/upload-artifact@v4
         with:
           name: jacoco-xml-report
           path: back/target/site/jacoco/jacoco.xml
+      - uses: actions/upload-artifact@v4
+        with:
+          name: maven-deps
+          path: back/target/dependency
 
   test-frontend:
     name: Tests Angular
@@ -57,7 +64,11 @@ jobs:
     runs-on: ubuntu-latest
     needs: [test-backend, test-frontend]
     steps:
+      # Checkout complet pour blame et historique git
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - uses: actions/setup-node@v4
         with:
           node-version: 18
@@ -78,7 +89,17 @@ jobs:
           name: lcov-frontend
           path: front/coverage/bobapp
 
-      # ➡️ Recompiler le backend pour générer back/target/classes
+      - name: Télécharger les dépendances Maven
+        uses: actions/download-artifact@v4
+        with:
+          name: maven-deps
+          path: back/target/dependency
+
+      # Nettoyage des fichiers .DS_Store pour éviter les warnings
+      - name: Supprimer les fichiers .DS_Store
+        run: find . -name .DS_Store -delete
+
+      # Recompiler le backend pour générer back/target/classes
       - name: Recompiler le backend (sans tests) pour SonarCloud
         run: mvn compile -DskipTests
         working-directory: back
@@ -88,6 +109,7 @@ jobs:
           ls -lh back/target/
           ls -lh back/target/classes/
           ls -lh back/target/site/jacoco/
+          ls -lh back/target/dependency/
           ls -lh front/coverage/bobapp/
 
       - name: Installer SonarCloud Scanner
@@ -102,6 +124,7 @@ jobs:
             -Dsonar.organization=${{ secrets.SONAR_ORG }} \
             -Dsonar.sources=back/src,front/src \
             -Dsonar.java.binaries=back/target/classes \
+            -Dsonar.java.libraries=back/target/dependency/*.jar \
             -Dsonar.coverage.jacoco.xmlReportPaths=back/target/site/jacoco/jacoco.xml \
             -Dsonar.javascript.lcov.reportPaths=front/coverage/bobapp/lcov.info \
             -Dsonar.host.url=https://sonarcloud.io \
