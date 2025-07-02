@@ -8,7 +8,7 @@ on:
 
 jobs:
   test-backend:
-    name: 🚀 Backend - Tests + Coverage
+    name: Backend - Tests + Coverage
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -21,15 +21,15 @@ jobs:
           distribution: temurin
           java-version: 17
 
-      - name: 🧪 Run tests with coverage
+      - name: Run tests with coverage
         run: mvn clean verify jacoco:report
 
-      - name: ✅ Vérifier la présence du rapport Jacoco
+      - name: Vérifier la présence du rapport Jacoco
         run: |
-          test -f target/site/jacoco/jacoco.xml && echo "✔ jacoco.xml généré" || (echo "❌ jacoco.xml manquant" && exit 1)
+          test -f target/site/jacoco/jacoco.xml && echo "✔ jacoco.xml généré" || (echo "jacoco.xml manquant" && exit 1)
 
   test-frontend:
-    name: 💻 Frontend - Tests + Coverage
+    name: Frontend - Tests + Coverage
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -43,9 +43,9 @@ jobs:
 
       - run: npm ci
 
-      - name: 🧪 Run Angular tests with coverage
+      - name: Run Angular tests with coverage
         run: npm run test -- --watch=false --browsers=ChromeHeadless --code-coverage
 
-      - name: ✅ Vérifier la présence de lcov.info
+      - name: Vérifier la présence de lcov.info
         run: |
-          test -f coverage/bobapp/lcov.info && echo "✔ lcov.info généré" || (echo "❌ lcov.info manquant" && exit 1)
+          test -f coverage/bobapp/lcov.info && echo "✔ lcov.info généré" || (echo "lcov.info manquant" && exit 1)

@@ -37,6 +37,3 @@ jobs:
         run: |
           docker rmi ${{ secrets.DOCKER_USERNAME }}/bobapp-back || true
           docker rmi ${{ secrets.DOCKER_USERNAME }}/bobapp-front || true
-
-# Ce workflow est exécuté UNIQUEMENT après l’analyse SonarCloud si tout est OK.
-# Il build et publie les images Docker du frontend et du backend sur Docker Hub.
