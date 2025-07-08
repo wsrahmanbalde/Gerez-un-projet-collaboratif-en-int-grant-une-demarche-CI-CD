@@ -92,8 +92,8 @@ Chaque étape est automatisée et s’exécute sur les branches `main` :
    - Front-end (Angular Coverage) : `front/coverage/index.html`
 
 - **Images Docker** :
-   - `bobapp-front` : [Lien Docker Hub – à compléter]
-   - `bobapp-back` : [Lien Docker Hub – à compléter]
+   - `bobapp-front` : [Lien Docker Hub ]
+   - `bobapp-back` : [Lien Docker Hub ]
 
 ---
 
